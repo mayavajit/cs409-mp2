@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Movie, SortBy, SortOrder } from '../types/movie.types';
 import { tmdbApi } from '../services/tmdbApi';
-import MovieCard from '../components/MovieCard';
 import { SORT_OPTIONS, ORDER_OPTIONS } from '../utils/constants';
 
 const SearchPage: React.FC = () => {
