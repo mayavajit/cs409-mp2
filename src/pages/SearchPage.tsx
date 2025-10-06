@@ -151,18 +151,70 @@ const SearchPage: React.FC = () => {
       {error && <p style={{ color: '#ff4444' }}>{error}</p>}
 
       <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+        display: 'flex',
+        flexDirection: 'column',
         gap: '20px'
       }}>
         {movies.map((movie, index) => (
-          <MovieCard
+          <div
             key={movie.id}
-            movie={movie}
             onClick={() => navigate(`/movie/${movie.id}`, {
               state: { movie, movies, currentIndex: index, returnPath: '/' }
             })}
-          />
+            style={{
+              display: 'flex',
+              gap: '20px',
+              backgroundColor: '#1a1a1a',
+              borderRadius: '8px',
+              overflow: 'hidden',
+              cursor: 'pointer',
+              transition: 'transform 0.2s',
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
+            onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+          >
+            <img 
+              src={tmdbApi.getImageUrl(movie.poster_path)}
+              alt={movie.title}
+              style={{
+                width: '150px',
+                height: '225px',
+                objectFit: 'cover',
+                flexShrink: 0
+              }}
+            />
+            <div style={{ padding: '20px', flex: 1 }}>
+              <h2 style={{ 
+                margin: '0 0 12px 0',
+                color: '#fff',
+                fontSize: '24px'
+              }}>
+                {movie.title}
+              </h2>
+              <div style={{ 
+                display: 'flex', 
+                gap: '20px',
+                marginBottom: '12px',
+                fontSize: '14px',
+                color: '#999'
+              }}>
+                <span>⭐ {movie.vote_average.toFixed(1)}</span>
+                <span>📅 {movie.release_date?.split('-')[0] || 'N/A'}</span>
+                <span>🔥 Popularity: {movie.popularity.toFixed(0)}</span>
+              </div>
+              <p style={{
+                color: '#ccc',
+                lineHeight: '1.6',
+                margin: 0,
+                overflow: 'hidden',
+                display: '-webkit-box',
+                WebkitLineClamp: 3,
+                WebkitBoxOrient: 'vertical',
+              }}>
+                {movie.overview || 'No overview available.'}
+              </p>
+            </div>
+          </div>
         ))}
       </div>
     </div>
