@@ -1,20 +1,20 @@
 // src/pages/SearchPage.tsx
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Movie, SortBy, SortOrder } from '../types/movie.types';
 import { tmdbApi } from '../services/tmdbApi';
 import MovieCard from '../components/MovieCard';
-import MovieDetailModal from '../components/MovieDetailModal';
 import { SORT_OPTIONS, ORDER_OPTIONS } from '../utils/constants';
 
 const SearchPage: React.FC = () => {
+  const navigate = useNavigate();
   const [query, setQuery] = useState('');
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [sortBy, setSortBy] = useState<SortBy>('popularity');
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
-  const [selectedMovieIndex, setSelectedMovieIndex] = useState<number | null>(null);
 
   const handleSearch = async (searchQuery: string) => {
     if (!searchQuery.trim()) {
@@ -72,7 +72,7 @@ const SearchPage: React.FC = () => {
 
   return (
     <div style={{ padding: '20px', maxWidth: '1400px', margin: '0 auto' }}>
-      <h1 style={{ color: '#fff', marginBottom: '30px' }}>Search for Movies</h1>
+      <h1 style={{ color: '#fff', marginBottom: '30px' }}>Search Movies</h1>
       
       <div style={{ 
         display: 'flex', 
@@ -159,21 +159,12 @@ const SearchPage: React.FC = () => {
           <MovieCard
             key={movie.id}
             movie={movie}
-            onClick={() => setSelectedMovieIndex(index)}
+            onClick={() => navigate(`/movie/${movie.id}`, {
+              state: { movie, movies, currentIndex: index, returnPath: '/' }
+            })}
           />
         ))}
       </div>
-
-      {selectedMovieIndex !== null && (
-        <MovieDetailModal
-          movie={movies[selectedMovieIndex]}
-          onClose={() => setSelectedMovieIndex(null)}
-          onPrevious={() => setSelectedMovieIndex(Math.max(0, selectedMovieIndex - 1))}
-          onNext={() => setSelectedMovieIndex(Math.min(movies.length - 1, selectedMovieIndex + 1))}
-          hasPrevious={selectedMovieIndex > 0}
-          hasNext={selectedMovieIndex < movies.length - 1}
-        />
-      )}
     </div>
   );
 };

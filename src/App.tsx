@@ -4,6 +4,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import SearchPage from './pages/SearchPage';
 import GalleryPage from './pages/GalleryPage';
+import MovieDetailPage from './pages/MovieDetailPage';
 import './App.css';
 
 function App() {
@@ -27,7 +28,7 @@ function App() {
             gap: '20px',
             alignItems: 'center'
           }}>
-            <h2 style={{ margin: 0, marginRight: 'auto' }}>🎬 MovieExplorer</h2>
+            <h2 style={{ margin: 0, marginRight: 'auto' }}>🎬 TMDB Explorer</h2>
             <Link 
               to="/" 
               style={{
@@ -64,6 +65,8 @@ function App() {
         <Routes>
           <Route path="/" element={<SearchPage />} />
           <Route path="/gallery" element={<GalleryPage />} />
+          <Route path="/movie/:id" element={<MovieDetailPage />} />
+          <Route path="*" element={<SearchPage />} />
         </Routes>
       </div>
     </Router>

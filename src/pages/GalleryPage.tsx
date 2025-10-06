@@ -1,18 +1,18 @@
 // src/pages/GalleryPage.tsx
 
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Movie } from '../types/movie.types';
 import { tmdbApi } from '../services/tmdbApi';
 import MovieCard from '../components/MovieCard';
-import MovieDetailModal from '../components/MovieDetailModal';
 import { DECADES } from '../utils/constants';
 
 const GalleryPage: React.FC = () => {
+  const navigate = useNavigate();
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [selectedDecade, setSelectedDecade] = useState<string | null>(null);
-  const [selectedMovieIndex, setSelectedMovieIndex] = useState<number | null>(null);
 
   const fetchMovies = async (startYear?: number, endYear?: number) => {
     setLoading(true);
@@ -103,21 +103,12 @@ const GalleryPage: React.FC = () => {
           <MovieCard
             key={movie.id}
             movie={movie}
-            onClick={() => setSelectedMovieIndex(index)}
+            onClick={() => navigate(`/movie/${movie.id}`, {
+              state: { movie, movies, currentIndex: index, returnPath: '/gallery' }
+            })}
           />
         ))}
       </div>
-
-      {selectedMovieIndex !== null && (
-        <MovieDetailModal
-          movie={movies[selectedMovieIndex]}
-          onClose={() => setSelectedMovieIndex(null)}
-          onPrevious={() => setSelectedMovieIndex(Math.max(0, selectedMovieIndex - 1))}
-          onNext={() => setSelectedMovieIndex(Math.min(movies.length - 1, selectedMovieIndex + 1))}
-          hasPrevious={selectedMovieIndex > 0}
-          hasNext={selectedMovieIndex < movies.length - 1}
-        />
-      )}
     </div>
   );
 };
